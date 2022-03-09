@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.2
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:
@@ -22,5 +23,15 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/clear.png
+    - assets/images/hail.png
+    - assets/images/heavycloud.png
+    - assets/images/heavyrain.png
+    - assets/images/lightcloud.png
+    - assets/images/lightrain.png
+    - assets/images/showers.png
+    - assets/images/sleet.png
+    - assets/images/snow.png
+    - assets/images/thunderstorm.png
+    - assets/images/weather.png
     
 
