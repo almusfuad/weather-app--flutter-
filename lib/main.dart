@@ -4,6 +4,7 @@ import 'package:weatherapp/models/routes.dart';
 
 // different screen data to load
 import './screens/home_screen.dart';
+import './screens/login_screen.dart';
 
 void main() => runApp(WeatherApp());
 
@@ -13,7 +14,7 @@ class WeatherApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: LoginScreen(),
       routes: {
         MyRoutes.homeScreen: (context) => HomeScreen(),
       },

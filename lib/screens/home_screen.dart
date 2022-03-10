@@ -14,10 +14,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int temperature = 0;
+  // variable to load data
+  int temperature;
   String location = 'Dhaka';
-  int woeid = 2487956;
+  int woeid = 1915035;
   String weather = 'clear';
+  String abbreviation = '';
+  String errorMessage = '';
 
 // API url search
   final String searchApiUrl =
@@ -25,21 +28,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final String searchApiLocation = 'https://www.metaweather.com/api/location/';
 
+  // initial stage screen
+  @override
+  void initState() {
+    super.initState();
+    fetchLocation();
+  }
+
 // function for searching result
   void fetchSearch(String input) async {
-    // variable to search location String as iput
-    var searchResult = await http.get(
-      Uri.parse(searchApiUrl + input),
-    );
+    try {
+      // variable to search location String as input
+      var searchResult = await http.get(
+        Uri.parse(searchApiUrl + input),
+      );
 
-    // variable to view the result
-    var result = jsonDecode(searchResult.body)[0];
+      // variable to view the result
+      var result = await jsonDecode(searchResult.body)[0];
 
-    // setstate to change result dynamically
-    setState(() {
-      location = result['title'];
-      woeid = result['woeid'];
-    });
+      // setstate to change result dynamically
+      setState(() {
+        location = result['title'];
+        woeid = result['woeid'];
+        errorMessage = '';
+      });
+    } catch (error) {
+      setState(() {
+        errorMessage =
+            "Sorry, we don't have the city in our database. Please search another city.";
+      });
+    }
   }
 
   // function for location result
@@ -48,21 +66,22 @@ class _HomeScreenState extends State<HomeScreen> {
     var searchLocation = await http.get(
       Uri.parse(searchApiLocation + woeid.toString()),
     );
-    var result = jsonDecode(searchLocation.body);
-    var consolidated_weather = result['consolidated_weather'];
-    var data = consolidated_weather[0];
+    var result = await jsonDecode(searchLocation.body);
+    var consolidated_weather = await result['consolidated_weather'];
+    var data = await consolidated_weather[0];
 
     // to see dynamically loaded data
     setState(() {
       temperature = data['the_temp'].round();
       weather = data['weather_state_name'].replaceAll(' ', '').toLowerCase();
+      abbreviation = data['weather_state_abbr'];
     });
   }
 
   // calling function while textFieldSubmitter
-  void onTextFieldSubmitted(String input) {
-    fetchSearch(input);
-    fetchLocation();
+  void onTextFieldSubmitted(String input) async {
+    await fetchSearch(input);
+    await fetchLocation();
   }
 
 // widget working tree
@@ -77,64 +96,88 @@ class _HomeScreenState extends State<HomeScreen> {
           fit: BoxFit.cover,
         ),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-              children: [
-                Center(
-                  child: Text(
-                    temperature.toString() + ' °C',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 60,
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    location,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 40,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                Container(
-                  width: 300,
-                  child: TextField(
-                    onSubmitted: (String input) {
-                      onTextFieldSubmitted(input);
-                    },
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Search another Location',
-                      hintStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
+      child: temperature == null
+          ? Center(
+              child: CircularProgressIndicator(
+                color: Colors.black,
+              ),
+            )
+          : Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      abbreviation == ''
+                          ? SizedBox()
+                          : Center(
+                              child: Image.network(
+                                'https://www.metaweather.com/static/img/weather/png/' +
+                                    abbreviation +
+                                    '.png',
+                                width: 100,
+                              ),
+                            ),
+                      Center(
+                        child: Text(
+                          temperature.toString() + ' °C',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 60,
+                          ),
+                        ),
                       ),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Colors.white,
+                      Center(
+                        child: Text(
+                          location,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 40,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                )
-              ],
+                  Column(
+                    children: [
+                      Container(
+                        width: 300,
+                        child: TextField(
+                          onSubmitted: (String input) {
+                            onTextFieldSubmitted(input);
+                          },
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: 'Search another Location',
+                            hintStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        errorMessage,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 20,
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }
