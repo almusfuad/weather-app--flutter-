@@ -1,5 +1,5 @@
 class MyRoutes {
   static String homeScreen = '/homeScreen';
-  static String loginScreen = '/';
-  static String signUp = '/signUp';
+  static String loginScreen = '/loginScreen';
+  static String signupScreen = '/signupScreen';
 }

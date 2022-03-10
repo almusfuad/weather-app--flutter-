@@ -1,10 +1,11 @@
 // material packages to show design
 import 'package:flutter/material.dart';
-import 'package:weatherapp/models/routes.dart';
 
 // different screen data to load
 import './screens/home_screen.dart';
 import './screens/login_screen.dart';
+import './models/routes.dart';
+import './screens/signup_screen.dart';
 
 void main() => runApp(WeatherApp());
 
@@ -17,6 +18,8 @@ class WeatherApp extends StatelessWidget {
       home: LoginScreen(),
       routes: {
         MyRoutes.homeScreen: (context) => HomeScreen(),
+        MyRoutes.loginScreen: (context) => LoginScreen(),
+        MyRoutes.signupScreen: (context) => SignUp(),
       },
     );
   }
