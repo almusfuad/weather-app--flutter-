@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 // other packages
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
+// other files
+import '../providers/auth.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -18,9 +22,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _submit() {
     _formKey.currentState.save();
-    setState(() {
-      print(_loginData);
-    });
+    // setState(() {
+    //   print(_loginData);
+    // });
+
+    Provider.of<Auth>(context, listen: false).login(
+      _loginData["username"],
+      _loginData["password"],
+    );
   }
 
   @override

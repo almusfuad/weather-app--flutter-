@@ -1,4 +1,6 @@
+// core dart packages
 import 'dart:convert';
+import 'dart:io';
 
 // package to render material app
 import 'package:flutter/material.dart';
@@ -11,11 +13,11 @@ class Auth with ChangeNotifier {
   // String _userName;
   // String _password;
 
-  Future<String> signup(String email, String userName, String password) async {
-    final url = Uri.parse('http://fluttertest.accelx.net/auth/users/');
+  Future<void> signup(String email, String userName, String password) async {
+    final signUpUrl = Uri.parse('http://fluttertest.accelx.net/auth/users/');
 
-    final response = await http.post(
-      url,
+    final responseSent = await http.post(
+      signUpUrl,
       body: json.encode(
         {
           "email": email,
@@ -30,8 +32,28 @@ class Auth with ChangeNotifier {
       },
     );
 
-    return json.decode(response.body);
+    return responseSent.body;
   }
 
-  Future<String> login(String userName, String password) {}
+  Future<void> login(String userName, String password) async {
+    final loginUrl = Uri.parse(
+      'http://fluttertest.accelx.net/auth/token/login',
+    );
+
+    final responseLogin = await http.post(
+      loginUrl,
+      body: json.encode(
+        {
+          "password": password,
+          "username": userName,
+        },
+      ),
+      headers: {
+        "Content-Type": "application/json",
+        "Vary": "Accept",
+      },
+    );
+
+    print(json.decode(responseLogin.body));
+  }
 }
