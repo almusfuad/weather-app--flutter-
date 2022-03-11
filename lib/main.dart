@@ -1,6 +1,10 @@
 // material packages to show design
 import 'package:flutter/material.dart';
 
+// other packages
+import 'package:provider/provider.dart';
+import 'package:weatherapp/providers/auth.dart';
+
 // different screen data to load
 import './screens/home_screen.dart';
 import './screens/login_screen.dart';
@@ -13,14 +17,21 @@ void main() => runApp(WeatherApp());
 class WeatherApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
-      routes: {
-        MyRoutes.homeScreen: (context) => HomeScreen(),
-        MyRoutes.loginScreen: (context) => LoginScreen(),
-        MyRoutes.signupScreen: (context) => SignUp(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: Auth(),
+        )
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: LoginScreen(),
+        routes: {
+          MyRoutes.homeScreen: (context) => HomeScreen(),
+          MyRoutes.loginScreen: (context) => LoginScreen(),
+          MyRoutes.signupScreen: (context) => SignUp(),
+        },
+      ),
     );
   }
 }

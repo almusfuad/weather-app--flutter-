@@ -1,4 +1,11 @@
+// package to show material design
 import 'package:flutter/material.dart';
+
+// extra packages
+import 'package:provider/provider.dart';
+
+// external file to use in this file
+import '../providers/auth.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -16,9 +23,15 @@ class _SignUpState extends State<SignUp> {
 
   void _submit() {
     _formKey.currentState.save();
-    setState(() {
-      print(_registrationData);
-    });
+    // setState(() {
+    //   print(_registrationData);
+    // });
+
+    Provider.of<Auth>(context, listen: false).signup(
+      _registrationData["email"],
+      _registrationData["username"],
+      _registrationData["password"],
+    );
   }
 
   @override
