@@ -30,6 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
       _loginData["username"],
       _loginData["password"],
     );
+
+    Navigator.pushNamed(context, '/homeScreen');
   }
 
   @override

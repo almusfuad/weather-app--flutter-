@@ -36,6 +36,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String userName, String password) async {
+    // using http instead of https to avoid erro cc:369
     final loginUrl = Uri.parse(
       'http://fluttertest.accelx.net/auth/token/login',
     );

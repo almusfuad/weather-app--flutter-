@@ -32,6 +32,8 @@ class _SignUpState extends State<SignUp> {
       _registrationData["username"],
       _registrationData["password"],
     );
+
+    Navigator.pushNamed(context, '/loginScreen');
   }
 
   @override
