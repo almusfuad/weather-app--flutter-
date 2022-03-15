@@ -31,8 +31,6 @@ class Auth with ChangeNotifier {
         "WWW-Authenticate": "Token",
       },
     );
-
-    return responseSent.body;
   }
 
   Future<void> login(String userName, String password) async {

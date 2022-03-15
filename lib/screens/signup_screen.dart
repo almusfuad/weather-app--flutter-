@@ -36,6 +36,38 @@ class _SignUpState extends State<SignUp> {
     Navigator.pushNamed(context, '/loginScreen');
   }
 
+// rule of getting password
+  validPass(String value) {
+    String pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+
+    RegExp regExp = new RegExp(pattern);
+
+    if (value.isEmpty) {
+      return ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please enter a password'),
+        ),
+      );
+    } else if (!regExp.hasMatch(value)) {
+      return ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              'Your password must contain Uppercase, Lowercase, Numiric, Special character and must be at least 8 characters.'),
+        ),
+      );
+    } else {
+      return null;
+    }
+  }
+
+  // email validation
+  String email(String value) {
+    if (_registrationData['email'] != -1) {
+      return 'The email has already an account.';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -117,6 +149,7 @@ class _SignUpState extends State<SignUp> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
+                        validator: validPass,
                         onSaved: (value) {
                           _registrationData["password"] = value;
                         },
