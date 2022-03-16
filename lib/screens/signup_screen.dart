@@ -13,12 +13,16 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  TextEditingController _email = TextEditingController();
+  TextEditingController _userName = TextEditingController();
+  TextEditingController _password = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   Map<String, String> _registrationData = {
-    "email": "",
-    "username": "",
-    "password": "",
+    "email": '',
+    "username": '',
+    "password": '',
   };
 
   // rule of getting password
@@ -39,11 +43,11 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
-  _submit() {
+  Future _submit() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      Provider.of<Auth>(context, listen: false).signup(
+      await Provider.of<Auth>(context, listen: false).signup(
         _registrationData["email"],
         _registrationData["username"],
         _registrationData["password"],
@@ -120,6 +124,7 @@ class _SignUpState extends State<SignUp> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
+                        controller: _email,
                         onSaved: (value) {
                           _registrationData["email"] = value;
                         },
@@ -136,6 +141,7 @@ class _SignUpState extends State<SignUp> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
+                        controller: _userName,
                         onSaved: (value) {
                           _registrationData["username"] = value;
                         },
@@ -153,6 +159,7 @@ class _SignUpState extends State<SignUp> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
+                        controller: _password,
                         validator: validPass,
                         onSaved: (value) {
                           _registrationData["password"] = value;

@@ -13,8 +13,9 @@ class Auth with ChangeNotifier {
   // String _userName;
   // String _password;
 
-  Future<void> signup(String email, String userName, String password) async {
-    final signUpUrl = Uri.parse('http://fluttertest.accelx.net/auth/users/');
+  Future signup(String email, String userName, String password) async {
+    final signUpUrl =
+        await Uri.parse('http://fluttertest.accelx.net/auth/users/');
 
     final responseSent = await http.post(
       signUpUrl,
@@ -27,8 +28,8 @@ class Auth with ChangeNotifier {
       ),
       headers: {
         "Content-Type": "application/json",
-        "Vary": "Accept",
-        "WWW-Authenticate": "Token",
+        // "Vary": "Accept",
+        // "WWW-Authenticate": "Token",
       },
     );
 
