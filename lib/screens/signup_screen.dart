@@ -1,4 +1,6 @@
 // package to show material design
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 // extra packages
@@ -19,13 +21,41 @@ class _SignUpState extends State<SignUp> {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  Map<String, String> _registrationData = {
+  Map _registrationData = {
     "email": '',
     "username": '',
     "password": '',
   };
 
-  // rule of getting password
+  // array for email and username
+  final emailArr = [];
+  final userNameArr = [];
+
+  // validation rules for email
+  String validEmail(String value) {
+    if (value.isEmpty) {
+      return 'An email is required';
+    } else if (!value.contains('@')) {
+      return 'Please enter a valid password';
+    } else if (emailArr.contains(value) != -1) {
+      return 'This email is already registered.';
+    } else {
+      return null;
+    }
+  }
+
+  // validation rules of username
+  String validUserName(String value) {
+    if (value.isEmpty) {
+      return 'User name cannot be a null';
+    } else if (userNameArr.contains(value) != -1) {
+      return 'The username is already registered.';
+    } else {
+      return null;
+    }
+  }
+
+  // validation rules of getting password
   String validPass(String value) {
     String pattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
@@ -43,6 +73,7 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
+// submitting the values to registration
   Future _submit() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -63,17 +94,6 @@ class _SignUpState extends State<SignUp> {
         ),
       );
     }
-
-    // setState(() {
-    //   print(_registrationData);
-    // });
-
-    // // email validation
-    // String email(String value) {
-    //   if (_registrationData['email'] != -1) {
-    //     return 'The email has already an account.';
-    //   }
-    // }
   }
 
   @override
@@ -125,8 +145,11 @@ class _SignUpState extends State<SignUp> {
                           ),
                         ),
                         controller: _email,
+                        validator: validEmail,
                         onSaved: (value) {
                           _registrationData["email"] = value;
+
+                          emailArr.add(value);
                         },
                       ),
                       SizedBox(
@@ -142,8 +165,11 @@ class _SignUpState extends State<SignUp> {
                           ),
                         ),
                         controller: _userName,
+                        validator: validUserName,
                         onSaved: (value) {
                           _registrationData["username"] = value;
+
+                          userNameArr.add(value);
                         },
                       ),
                       SizedBox(

@@ -28,8 +28,6 @@ class Auth with ChangeNotifier {
       ),
       headers: {
         "Content-Type": "application/json",
-        // "Vary": "Accept",
-        // "WWW-Authenticate": "Token",
       },
     );
 
@@ -52,18 +50,19 @@ class Auth with ChangeNotifier {
       ),
       headers: {
         "Content-Type": "application/json",
-        "Vary": "Accept",
+        "Access-Control_Allow_Origin": "*"
       },
-      encoding: Encoding.getByName("utf-8"),
     );
 
     final responseData = json.decode(responseLogin.body);
 
-    if (responseLogin.statusCode == 200) {
-      print(responseData);
-    } else if (responseLogin.statusCode == 400) {
-      print(responseData);
-    }
+    // if (responseLogin.statusCode == 200) {
+    //   print(responseData);
+    // } else if (responseLogin.statusCode == 400) {
+    //   print(responseData);
+    // }
+
+    print(responseLogin.statusCode);
 
     print(responseData.non_field_errors);
   }

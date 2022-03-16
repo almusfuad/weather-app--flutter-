@@ -19,13 +19,13 @@ class _LoginScreenState extends State<LoginScreen> {
     "username": "",
   };
 
-  _submit() {
+  Future _submit() async {
     _formKey.currentState.save();
     // setState(() {
     //   print(_loginData);
     // });
 
-    Provider.of<Auth>(context, listen: false).login(
+    await Provider.of<Auth>(context, listen: false).login(
       _loginData["username"],
       _loginData["password"],
     );
