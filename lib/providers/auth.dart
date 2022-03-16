@@ -30,6 +30,7 @@ class Auth with ChangeNotifier {
         "Vary": "Accept",
         "WWW-Authenticate": "Token",
       },
+      encoding: Encoding.getByName("utf-8"),
     );
   }
 
@@ -51,8 +52,17 @@ class Auth with ChangeNotifier {
         "Content-Type": "application/json",
         "Vary": "Accept",
       },
+      encoding: Encoding.getByName("utf-8"),
     );
 
-    print(json.decode(responseLogin.body));
+    final responseData = json.decode(responseLogin.body);
+
+    if (responseLogin.statusCode == 200) {
+      print(responseData);
+    } else if (responseLogin.statusCode == 400) {
+      print(responseData);
+    }
+
+    print(responseData.non_field_errors);
   }
 }

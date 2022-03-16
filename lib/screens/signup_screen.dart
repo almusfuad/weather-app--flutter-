@@ -21,22 +21,7 @@ class _SignUpState extends State<SignUp> {
     "password": "",
   };
 
-  void _submit() {
-    _formKey.currentState.save();
-    // setState(() {
-    //   print(_registrationData);
-    // });
-
-    Provider.of<Auth>(context, listen: false).signup(
-      _registrationData["email"],
-      _registrationData["username"],
-      _registrationData["password"],
-    );
-
-    Navigator.pushNamed(context, '/loginScreen');
-  }
-
-// rule of getting password
+  // rule of getting password
   validPass(String value) {
     String pattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
@@ -56,15 +41,31 @@ class _SignUpState extends State<SignUp> {
               'Your password must contain Uppercase, Lowercase, Numiric, Special character and must be at least 8 characters.'),
         ),
       );
-    } else {
-      return null;
     }
   }
 
-  // email validation
-  String email(String value) {
-    if (_registrationData['email'] != -1) {
-      return 'The email has already an account.';
+  void _submit() {
+    _formKey.currentState.save();
+    // setState(() {
+    //   print(_registrationData);
+    // });
+
+    Provider.of<Auth>(context, listen: false).signup(
+      _registrationData["email"],
+      _registrationData["username"],
+      _registrationData["password"],
+    );
+
+    // // email validation
+    // String email(String value) {
+    //   if (_registrationData['email'] != -1) {
+    //     return 'The email has already an account.';
+    //   }
+    // }
+    if (validPass == true) {
+      setState(() {
+        Navigator.pushNamed(context, '/loginScreen');
+      });
     }
   }
 
@@ -149,9 +150,13 @@ class _SignUpState extends State<SignUp> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        validator: validPass,
+                        // validator: (inputValue) {
+                        //   validPass(inputValue);
+                        //   return inputValue;
+                        // },
                         onSaved: (value) {
-                          _registrationData["password"] = value;
+                          if (validPass(value))
+                            _registrationData["password"] = value;
                         },
                       ),
                       SizedBox(

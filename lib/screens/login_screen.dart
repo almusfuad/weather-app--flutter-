@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 // other packages
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 // other files
@@ -20,18 +21,25 @@ class _LoginScreenState extends State<LoginScreen> {
     "username": "",
   };
 
-  void _submit() {
+  _submit() {
     _formKey.currentState.save();
     // setState(() {
     //   print(_loginData);
     // });
+    try {
+      Provider.of<Auth>(context, listen: false).login(
+        _loginData["username"],
+        _loginData["password"],
+      );
+    } on HttpException {
+      var errorMessage = 'Authentication failed';
+    } catch (error) {
+      var errorMessage = 'Something went wrong';
+    }
 
-    Provider.of<Auth>(context, listen: false).login(
-      _loginData["username"],
-      _loginData["password"],
-    );
-
-    Navigator.pushNamed(context, '/homeScreen');
+    setState(() {
+      Navigator.pushNamed(context, '/homeScreen');
+    });
   }
 
   @override
