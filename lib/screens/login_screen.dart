@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 // other packages
@@ -26,20 +24,13 @@ class _LoginScreenState extends State<LoginScreen> {
     // setState(() {
     //   print(_loginData);
     // });
-    try {
-      Provider.of<Auth>(context, listen: false).login(
-        _loginData["username"],
-        _loginData["password"],
-      );
-    } on HttpException {
-      var errorMessage = 'Authentication failed';
-    } catch (error) {
-      var errorMessage = 'Something went wrong';
-    }
 
-    setState(() {
-      Navigator.pushNamed(context, '/homeScreen');
-    });
+    Provider.of<Auth>(context, listen: false).login(
+      _loginData["username"],
+      _loginData["password"],
+    );
+
+    Navigator.pushNamed(context, '/homeScreen');
   }
 
   @override

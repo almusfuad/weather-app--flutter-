@@ -30,8 +30,9 @@ class Auth with ChangeNotifier {
         "Vary": "Accept",
         "WWW-Authenticate": "Token",
       },
-      encoding: Encoding.getByName("utf-8"),
     );
+
+    print(json.decode(responseSent.body));
   }
 
   Future<void> login(String userName, String password) async {

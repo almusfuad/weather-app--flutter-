@@ -22,39 +22,47 @@ class _SignUpState extends State<SignUp> {
   };
 
   // rule of getting password
-  validPass(String value) {
+  String validPass(String value) {
     String pattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
 
     RegExp regExp = new RegExp(pattern);
 
     if (value.isEmpty) {
-      return ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please enter a password'),
-        ),
-      );
+      return 'Please enter a password';
     } else if (!regExp.hasMatch(value)) {
-      return ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              'Your password must contain Uppercase, Lowercase, Numiric, Special character and must be at least 8 characters.'),
-        ),
-      );
+      return 'Your password must contain Uppercase, Lowercase, Numeric, Special character and must be at least 8 characters.';
+    } else if (value.toLowerCase().contains('password')) {
+      return 'You cannot use a common password';
+    } else {
+      return null;
     }
   }
 
-  void _submit() {
-    _formKey.currentState.save();
+  _submit() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+
+      Provider.of<Auth>(context, listen: false).signup(
+        _registrationData["email"],
+        _registrationData["username"],
+        _registrationData["password"],
+      );
+
+      setState(() {
+        Navigator.pushNamed(context, '/loginScreen');
+      });
+    } else {
+      return ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Try again'),
+        ),
+      );
+    }
+
     // setState(() {
     //   print(_registrationData);
     // });
-
-    Provider.of<Auth>(context, listen: false).signup(
-      _registrationData["email"],
-      _registrationData["username"],
-      _registrationData["password"],
-    );
 
     // // email validation
     // String email(String value) {
@@ -62,11 +70,6 @@ class _SignUpState extends State<SignUp> {
     //     return 'The email has already an account.';
     //   }
     // }
-    if (validPass == true) {
-      setState(() {
-        Navigator.pushNamed(context, '/loginScreen');
-      });
-    }
   }
 
   @override
@@ -150,13 +153,9 @@ class _SignUpState extends State<SignUp> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        // validator: (inputValue) {
-                        //   validPass(inputValue);
-                        //   return inputValue;
-                        // },
+                        validator: validPass,
                         onSaved: (value) {
-                          if (validPass(value))
-                            _registrationData["password"] = value;
+                          _registrationData["password"] = value;
                         },
                       ),
                       SizedBox(
