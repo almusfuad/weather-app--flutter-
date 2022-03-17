@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 // function for searching result
-  void fetchSearch(String input) async {
+  Future fetchSearch(String input) async {
     try {
       // variable to search location String as input
       var searchResult = await http.get(
@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // function for location result
-  void fetchLocation() async {
+  Future fetchLocation() async {
     // searching for location
     var searchLocation = await http.get(
       Uri.parse(searchApiLocation + woeid.toString()),
@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // calling function while textFieldSubmitter
-  void onTextFieldSubmitted(String input) async {
+  Future onTextFieldSubmitted(String input) async {
     await fetchSearch(input);
     await fetchLocation();
   }

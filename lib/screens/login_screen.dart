@@ -12,25 +12,52 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   Map<String, String> _loginData = {
-    "password": "",
-    "username": "",
+    "username": '',
+    "password": '',
   };
 
+  // username validation
+  String usernameValid(String value) {
+    if (value.isEmpty) {
+      return 'Please input your username.';
+    } else {
+      return null;
+    }
+  }
+
+  // password validation
+  String passwordValid(String value) {
+    if (value.isEmpty) {
+      return 'Please input your password.';
+    } else {
+      return null;
+    }
+  }
+
   Future _submit() async {
-    _formKey.currentState.save();
-    // setState(() {
-    //   print(_loginData);
-    // });
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
 
-    await Provider.of<Auth>(context, listen: false).login(
-      _loginData["username"],
-      _loginData["password"],
-    );
-
-    Navigator.pushNamed(context, '/homeScreen');
+      await Provider.of<Auth>(context, listen: false).login(
+        _loginData["username"],
+        _loginData["password"],
+      );
+      setState(() {
+        Navigator.pushNamed(context, '/homeScreen');
+      });
+    } else {
+      return ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Credential error. Please try agian.'),
+        ),
+      );
+    }
   }
 
   @override
@@ -51,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(
               padding: const EdgeInsets.only(
                 left: 40,
-                top: 130,
+                top: 100,
               ),
               child: Text(
                 'Please login\nto continue',
@@ -81,6 +108,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
+                        controller: _usernameController,
+                        validator: usernameValid,
                         onSaved: (value) {
                           _loginData["username"] = value;
                         },
@@ -98,6 +127,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
+                        controller: _passwordController,
+                        validator: passwordValid,
                         onSaved: (value) {
                           _loginData["password"] = value;
                         },

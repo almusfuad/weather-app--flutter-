@@ -1,6 +1,4 @@
 // package to show material design
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 
 // extra packages
@@ -15,9 +13,9 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  TextEditingController _email = TextEditingController();
-  TextEditingController _userName = TextEditingController();
-  TextEditingController _password = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
@@ -37,9 +35,11 @@ class _SignUpState extends State<SignUp> {
       return 'An email is required';
     } else if (!value.contains('@')) {
       return 'Please enter a valid password';
-    } else if (emailArr.contains(value) != -1) {
-      return 'This email is already registered.';
-    } else {
+    }
+    // else if (emailArr.contains(value) != -1) {
+    //   return 'This email is already registered.';
+    // }
+    else {
       return null;
     }
   }
@@ -48,9 +48,11 @@ class _SignUpState extends State<SignUp> {
   String validUserName(String value) {
     if (value.isEmpty) {
       return 'User name cannot be a null';
-    } else if (userNameArr.contains(value) != -1) {
-      return 'The username is already registered.';
-    } else {
+    }
+    // else if (userNameArr.contains(value) != -1) {
+    //   return 'The username is already registered.';
+    // }
+    else {
       return null;
     }
   }
@@ -144,7 +146,7 @@ class _SignUpState extends State<SignUp> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        controller: _email,
+                        controller: _emailController,
                         validator: validEmail,
                         onSaved: (value) {
                           _registrationData["email"] = value;
@@ -164,7 +166,7 @@ class _SignUpState extends State<SignUp> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        controller: _userName,
+                        controller: _userNameController,
                         validator: validUserName,
                         onSaved: (value) {
                           _registrationData["username"] = value;
@@ -185,7 +187,7 @@ class _SignUpState extends State<SignUp> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        controller: _password,
+                        controller: _passwordController,
                         validator: validPass,
                         onSaved: (value) {
                           _registrationData["password"] = value;

@@ -1,6 +1,5 @@
 // core dart packages
 import 'dart:convert';
-import 'dart:io';
 
 // package to render material app
 import 'package:flutter/material.dart';
@@ -34,9 +33,9 @@ class Auth with ChangeNotifier {
     print(json.decode(responseSent.body));
   }
 
-  Future<void> login(String userName, String password) async {
+  Future login(String userName, String password) async {
     // using http instead of https to avoid erro cc:369
-    final loginUrl = Uri.parse(
+    final loginUrl = await Uri.parse(
       'http://fluttertest.accelx.net/auth/token/login',
     );
 
@@ -44,26 +43,25 @@ class Auth with ChangeNotifier {
       loginUrl,
       body: json.encode(
         {
-          "password": password,
           "username": userName,
+          "password": password,
         },
       ),
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control_Allow_Origin": "*"
+      headers: <String, String>{
+        "Content-Type": 'application/json',
+        'Accept': 'application/json',
+        // // "Vary": 'Accept',
+        "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With,content-type"
       },
     );
 
-    final responseData = json.decode(responseLogin.body);
-
-    // if (responseLogin.statusCode == 200) {
-    //   print(responseData);
-    // } else if (responseLogin.statusCode == 400) {
-    //   print(responseData);
-    // }
+    final responseData = await json.decode(responseLogin.body);
 
     print(responseLogin.statusCode);
 
-    print(responseData.non_field_errors);
+    // print(responseData.non_field_errors);
   }
 }
